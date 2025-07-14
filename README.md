@@ -2,27 +2,153 @@
 
 ![Agent-101](./assets/NosanaBuildersChallengeAgents.jpg)
 
-## Topic
+---
 
-Nosana Builders Challenge, 2nd edition
-Agent-101: Build your first agent
+## 🧠 Agent Description and Purpose
 
-## Description
+### 🔹 Name: **Land Intelligence AI Agent**
 
-The main goal of this `Nosana Builders Challenge` to teach participants to build and deploy agents. This first step will be in running a basic AI agent and giving it some basic functionality. Participants will add a tool, for the tool calling capabilities of the agent. These are basically some TypeScript functions, that will, for example, retrieve some data from a weather API, post a tweet via an API call, etc.
+This agent analyzes tokenized land NFTs to provide on-chain land intelligence using LLMs and geospatial data.
 
-## [Mastra](https://github.com/mastra-ai/mastra)
+### 🔍 **Purpose:**
 
-For this challenge we will be using Mastra to build our tool.
+* ✅ **Detect land overlaps** using geospatial data from existing NFTs
+* ✅ **Fetch nearby amenities** (e.g. schools, hospitals, roads) using OpenStreetMap's Overpass API
+* ✅ **Suggest land use-cases** based on surrounding infrastructure (e.g. good for estate, farming, or commercial use)
+* ✅ **Generate human-readable reports** using LLMs like Qwen2.5 via Ollama
+* ✅ **Suggest field visit itineraries** based on relevant POIs around a land plot
 
-> Mastra is an opinionated TypeScript framework that helps you build AI applications and features quickly. It gives you the set of primitives you need: workflows, agents, RAG, integrations, and evals. You can run Mastra on your local machine, or deploy to a serverless cloud.
+This agent helps real estate investors, land buyers make informed decisions about land assets stored as NFTs.
 
-### Required Reading
+---
 
-We recommend reading the following sections to get started with how to create an Agent and how to implement Tool Calling.
+### 🧠 Tech Stack:
 
-- <https://mastra.ai/en/docs/agents/overview>
-- [Mastra Guide: Build an AI stock agent](https://mastra.ai/en/guides/guide/stock-agent)
+* 🧱 ERC-1155 Land NFTs w/ metadata stored on IPFS
+* 🛰️ OpenStreetMap API (Overpass) for nearby infrastructure
+* 🧠 Qwen2.5 LLM served via Ollama
+* ⚙️ Mastra Agent Framework
+* 🔥 Firebase for storage and OpenSea link tracking
+
+---
+
+Here are the **Setup Instructions** for your Land Intelligence AI Agent — perfect for your `README.md`, Docker Hub, or Nosana submission:
+
+---
+
+## ⚙️ Setup Instructions
+
+This guide shows you how to run the Land Intelligence AI Agent locally or in Docker, using an LLM served by [Ollama](https://ollama.com).
+
+---
+
+### 📦 Requirements
+
+* [Node.js 20+](https://nodejs.org)
+* [pnpm](https://pnpm.io/)
+* [Docker](https://www.docker.com/)
+* (Optional) [Ollama](https://ollama.com) installed locally
+
+---
+
+### 📁 Clone the Project
+
+```bash
+git clone https://github.com/jnationj/agent-challenge.git
+cd agent-challenge
+```
+
+---
+
+### 🧪 Run Locally (with Ollama installed)
+
+1. **Start Ollama and pull model:**
+
+```bash
+ollama serve
+ollama pull qwen2.5:1.5b
+ollama run qwen2.5:1.5b
+```
+
+2. **Set up environment:**
+
+Create a `.env` file:
+
+```env
+API_BASE_URL=http://localhost:11434/api
+MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
+```
+
+3. **Install dependencies and run:**
+
+```bash
+pnpm install
+pnpm run dev
+```
+
+The Mastra playground will be available at [http://localhost:8080](http://localhost:8080)
+
+---
+
+### 🐳 Run with Docker (self-contained)
+
+> Runs Ollama and the agent in the same container.
+
+1. **Build the image:**
+
+```bash
+docker build -t jnationj/agent-challenge:latest .
+```
+
+2. **Run the container:**
+
+```bash
+docker run --env-file .env.docker -p 8080:8080 jnationj/agent-challenge:latest
+```
+
+The agent will automatically:
+
+* Start Ollama
+* Pull the Qwen model
+* Start the agent on port 8080
+
+---
+
+### 🚀 Deploy on Nosana
+
+1. Create a `nosana.json` with:
+
+```json
+{
+  "ops": [
+    {
+      "id": "agent",
+      "args": {
+        "gpu": true,
+        "image": "docker.io/jnationj/agent-challenge:latest",
+        "entrypoint": ["/bin/sh"],
+        "cmd": ["-c", "/start.sh"],
+        "expose": [{ "port": 8080 }]
+      },
+      "type": "container/run"
+    }
+  ],
+  "meta": {
+    "trigger": "dashboard",
+    "system_requirements": {
+      "required_vram": 4
+    }
+  },
+  "type": "container",
+  "version": "0.1"
+}
+```
+
+2. Go to [https://dashboard.nosana.io](https://dashboard.nosana.io) and submit the job.
+
+---
+
+
 
 ## Get Started
 
@@ -34,60 +160,29 @@ pnpm install
 pnpm run dev
 ```
 
-## Assignment
-
-### Challenge Overview
-
-Welcome to the Nosana AI Agent Hackathon! Your mission is to build and deploy an AI agent on Nosana.
-While we provide a weather agent as an example, your creativity is the limit. Build agents that:
-
-**Beginner Level:**
-
-- **Simple Calculator**: Perform basic math operations with explanations
-- **Todo List Manager**: Help users track their daily tasks
-
-**Intermediate Level:**
-
-- **News Summarizer**: Fetch and summarize latest news articles
-- **Crypto Price Checker**: Monitor cryptocurrency prices and changes
-- **GitHub Stats Reporter**: Fetch repository statistics and insights
-
-**Advanced Level:**
-
-- **Blockchain Monitor**: Track and alert on blockchain activities
-- **Trading Strategy Bot**: Automate simple trading strategies
-- **Deploy Manager**: Deploy and manage applications on Nosana
-
-Or any other innovative AI agent idea at your skill level!
-
 ### Getting Started
+1. **Clone the [Land AI Agent](https://github.com/jnationj/agent-challenge)**
+2. **Install dependencies** with `pnpm install`
+3. **Run the development server** with `pnpm run dev`
+4. **Build your agent** using the Mastra framework
 
-1. **Fork the [Nosana Agent Challenge](https://github.com/nosana-ai/agent-challenge)** to your GitHub account
-2. **Clone your fork** locally
-3. **Install dependencies** with `pnpm install`
-4. **Run the development server** with `pnpm run dev`
-5. **Build your agent** using the Mastra framework
+### How to build Land AI Agent
 
-### How to build your Agent
-
-Here we will describe the steps needed to build an agent.
+Here we will describe the steps needed to build land ai agent.
 
 #### Folder Structure
 
-Provided in this repo, there is the `Weather Agent`.
-This is a fully working agent that allows a user to chat with an LLM, and fetches real time weather data for the provided location.
+This repo, there is the `Land Agent`.
+This is a working agent for our submission that allows a user to chat with an LLM, and fetches real amenities data for the provided land coordinate (Real world case plot of land).
 
-There are two main folders we need to pay attention to:
+There is main folders we need to pay attention to:
 
-- [src/mastra/agents/weather-agent/](./src/mastra/agents/weather-agent/)
-- [src/mastra/agents/your-agents/](./src/mastra/agents/your-agent/)
+- [src/mastra/agents/land-agent/](./src/mastra/agents/land-agent/)
 
-In `src/mastra/agents/weather-agent/` you will find a complete example of a working agent. Complete with Agent definition, API calls, interface definition, basically everything needed to get a full fledged working agent up and running.
-In `src/mastra/agents/your-agents/` you will find a bare bones example of the needed components, and imports to get started building your agent, we recommend you rename this folder, and it's files to get started.
+In `src/mastra/agents/land-agent/` you will find a complete submission of a working agent. Complete with Agent definition, API calls, interface definition, basically everything needed to get a full fledged working agent up and running.
 
-Rename these files to represent the purpose of your agent and tools. You can use the [Weather Agent Example](#example:_weather_agent) as a guide until you are done with it, and then you can delete these files before submitting your final submission.
 
-As a bonus, for the ambitious ones, we have also provided the [src/mastra/agents/weather-agent/weather-workflow.ts](./src/mastra/agents/weather-agent/weather-workflow.ts) file as an example. This file contains an example of how you can chain agents and tools to create a workflow, in this case, the user provides their location, and the agent retrieves the weather for the specified location, and suggests an itinerary.
+We also provided the [src/mastra/agents/land-agent/land-workflow.ts](./src/mastra/agents/land-agent/land-workflow.ts) file. This file contains how you can chain agents and tools to create a workflow, in this case, the user provides their 4 coordinate ploygon, and the agent retrieves the a boolean overlaps or not, basic amenities and land use suggestion for the location, and suggests an itinerary for example you want to check if there are schools areound the property etc
 
 ### LLM-Endpoint
 
@@ -99,7 +194,7 @@ You can use the following endpoint and model for testing, if you wish:
 
 ```
 MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
-API_BASE_URL= https://dashboard.nosana.com/jobs/GPVMUckqjKR6FwqnxDeDRqbn34BH7gAa5xWnWuNH1drf
+API_BASE_URL= http://127.0.0.1:11434/api
 ```
 
 #### Running Your Own LLM with Ollama
@@ -139,10 +234,48 @@ Do note `qwen2.5:1.5b` is not suited for complex tasks.
 
 The Ollama server will run on `http://localhost:11434` by default and is compatible with the OpenAI API format that Mastra expects.
 
-### Testing your Agent
+---
+
+## ✅ Environment Variables
+
+| Variable                 | Description                                    | Example                                           |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------- |
+| `API_BASE_URL`           | URL for the Ollama API                         | `http://127.0.0.1:11434/api` *(inside container)* |
+| `MODEL_NAME_AT_ENDPOINT` | The LLM model to load via Ollama               | `qwen2.5:1.5b`                                    |
+| `PORT` *(optional)*      | Port your agent will run on (defaults to 8080) | `8080`                                            |
+
+---
+
+## ✅ Full `.env.docker` Example
+
+```dotenv
+API_BASE_URL=http://127.0.0.1:11434/api
+MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
+PORT=8080
+```
+
+You can pass this file to Docker like:
+
+```bash
+docker run --env-file .env.docker -p 8080:8080 jnationj/agent-challenge:latest
+```
+
+---
+
+## 🔍 Used For:
+
+* `API_BASE_URL`: Needed so the agent knows where to call Ollama for LLM responses
+* `MODEL_NAME_AT_ENDPOINT`: Used in `ollama pull` to fetch the correct model
+* `PORT`: Tells Mastra or your server which port to bind to (if your app supports it)
+
+---
+
+
+
+### Testing Land Agent
 
 You can read the [Mastra Documentation: Playground](https://mastra.ai/en/docs/local-dev/mastra-dev) to learn more on how to test your agent locally.
-Before deploying your agent to Nosana, it's crucial to thoroughly test it locally to ensure everything works as expected. Follow these steps to validate your agent:
+Before deploying your agent to Nosana, it's crucial to thoroughly test it locally to ensure everything works as expected. Follow these steps to validate land agent:
 
 **Local Testing:**
 
@@ -157,181 +290,101 @@ After building your Docker container, test it locally before pushing to the regi
 
 ```bash
 # Build your container
-docker build -t yourusername/agent-challenge:latest .
+docker build -t jnationj/agent-challenge:latest .
 
 # Run it locally with environment variables
-docker run -p 8080:8080 --env-file .env yourusername/agent-challenge:latest
+docker run -p 8080:8080 --env-file .env.docker jnationj/agent-challenge:latest
 
 # Test the containerized agent at http://localhost:8080
 ```
 
 Ensure your agent responds correctly and all tools function properly within the containerized environment. This step is critical as the Nosana deployment will use this exact container.
 
-### Submission Requirements
-
-#### 1. Code Development
-
-- Fork this repository and develop your AI agent
-- Your agent must include at least one custom tool (function)
-- Code must be well-documented and include clear setup instructions
-- Include environment variable examples in a `.env.example` file
-
 #### 2. Docker Container
 
-- Create a `Dockerfile` for your agent
-- Build and push your container to Docker Hub or GitHub Container Registry
-- Container must be publicly accessible
-- Include the container URL in your submission
+- container URL for our land-agent submission [https://hub.docker.com/r/jnationj/agent-challenge](https://hub.docker.com/r/jnationj/agent-challenge)
 
-##### Build, Run, Publish
-
-Note: You'll need an account on [Dockerhub](https://hub.docker.com/)
-
-```sh
-
-# Build and tag
-docker build -t yourusername/agent-challenge:latest .
-
-# Run the container locally
-docker run -p 8080:8080 yourusername/agent-challenge:latest
-
-# Login
-docker login
-
-# Push
-docker push yourusername/agent-challenge:latest
-```
 
 #### 3. Nosana Deployment
 
-- Deploy your Docker container on Nosana
-- Your agent must successfully run on the Nosana network
+- Deploy land-agent Docker container on Nosana
+- Land-agent successfully ran on the Nosana network
 - Include the Nosana job ID or deployment link
-
+- [Dashboard](https://dashboard.nosana.com/jobs/EtQhTT4c8TCFYCCTZVyVRGjev2Bir6LoWiZGC5x53ss3)
+- [Deployment Link](https://3rzzc2pzv3ubpfmvpfkdbaz5g8ctphgujkegixnxnzyb.node.k8s.prd.nos.ci/agents/landAgent/chat)
+  
+  
 ##### Nosana Job Definition
 
-We have included a Nosana job definition at <./nos_job_def/nosana_mastra.json>, that you can use to publish your agent to the Nosana network.
+We have included a Nosana job definition at <./nos_job_def/nosana_agent.json>, that you can use to publish land agent to the Nosana network.
 
 **A. Deploying using [@nosana/cli](https://github.com/nosana-ci/nosana-cli/)**
 
-- Edit the file and add in your published docker image to the `image` property. `"image": "docker.io/yourusername/agent-challenge:latest"`
+- Published docker image to the `image` property. `"image": "docker.io/jnationj/agent-challenge:latest"`
 - Download and install the [@nosana/cli](https://github.com/nosana-ci/nosana-cli/)
 - Load your wallet with some funds
   - Retrieve your address with: `nosana address`
   - Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job.
-- Run: `nosana job post --file nosana_mastra.json --market nvidia-3060 --timeout 30`
+- Run: `nosana job post --file nosana_agent.json --market nvidia-4090 --timeout 30`
 - Go to the [Nosana Dashboard](https://dashboard.nosana.com/deploy) to see your job
 
 **B. Deploying using the [Nosana Dashboard](https://dashboard.nosana.com/deploy)**
 
 - Make sure you have https://phantom.com/, installed for your browser.
-- Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job.
+- Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job. OR
+- Fund it yourself by buying NOS from exchange [Gate](https://gate.com) or MEXC
 - Click the `Expand` button, on the [Nosana Dashboard](https://dashboard.nosana.com/deploy)
-- Copy and Paste your edited Nosana Job Definition file into the Textarea
+- Copy and Paste `<./nos_job_def/nosana_agent.json>` Nosana Job Definition file into the Textarea
 - Choose an appropriate GPU for the AI model that you are using
 - Click `Deploy`
 
-#### 4. Video Demo
+#### 5. Example usage
 
-- Record a 1-3 minute video demonstrating:
-  - Your agent running on Nosana
-  - Key features and functionality
-  - Real-world use case demonstration
-- Upload to YouTube, Loom, or similar platform
+🧪 Example Usage
+Once the agent is running (locally, in Docker, or on Nosana), you can interact with it using the Mastra Agent Playground or via API.
 
-#### 5. Documentation
+✅ 1. Open the Playground
+Visit the running agent in your browser:
 
-- Update this README with:
-  - Agent description and purpose
-  - Setup instructions
-  - Environment variables required
-  - Docker build and run commands
-  - Example usage
+```
+http://localhost:8080
+```
 
-### Submission Process
+You'll see the Mastra AI Playground where you can interact with the Land Intelligence Agent using plain language.
 
-1. **Complete all requirements** listed above
-2. **Commit all of your changes to the `main` branch of your forked repository**
-   - All your code changes
-   - Updated README
-   - Link to your Docker container
-   - Link to your video demo
-   - Nosana deployment proof
-3. **Social Media Post**: Share your submission on X (Twitter)
-   - Tag @nosana_ai
-   - Include a brief description of your agent
-   - Add hashtag #NosanaAgentChallenge
-4. **Finalize your submission on the <https://earn.superteam.fun/agent-challenge> page**
+✅ 2. Example Prompts
+Try asking:
 
-- Remember to add your forked GitHub repository link
-- Remember to add a link to your X post.
+```
+Analyze this land:
+Sure! Continuing the **Example Usage** section:
 
-### Judging Criteria
+---
+Analyze this land:
+[
+  [52.3667, 4.8945],
+  [52.3668, 4.8955],
+  [52.3658, 4.8956],
+  [52.3657, 4.8946]
+]
 
-Submissions will be evaluated based on:
+```
+```
+Is this land already registered?
+[
+[4.81790, 7.00644],
+[4.81780, 7.00622],
+[4.81765, 7.00636],
+[4.81775, 7.00658],
+]
+```
 
-1. **Innovation** (25%)
+The agent will:
 
-   - Originality of the agent concept
-   - Creative use of AI capabilities
+* ✅ Check for overlap with existing land NFTs on-chain
+* ✅ Fetch nearby amenities (e.g. hospitals, schools, roads) within 500m
+* ✅ Suggest possible land use-cases (e.g. estate, farm, market)
 
-2. **Technical Implementation** (25%)
+---
 
-   - Code quality and organization
-   - Proper use of the Mastra framework
-   - Efficient tool implementation
-
-3. **Nosana Integration** (25%)
-
-   - Successful deployment on Nosana
-   - Resource efficiency
-   - Stability and performance
-
-4. **Real-World Impact** (25%)
-   - Practical use cases
-   - Potential for adoption
-   - Value proposition
-
-### Prizes
-
-We’re awarding the **top 10 submissions**:
-
-- 🥇 1st: $1,000 USDC
-- 🥈 2nd: $750 USDC
-- 🥉 3rd: $450 USDC
-- 🏅 4th: $200 USDC
-- 🔟 5th–10th: $100 USDC
-
-All prizes are paid out directly to participants on [SuperTeam](https://superteam.fun)
-
-### Resources
-
-- [Nosana Documentation](https://docs.nosana.io)
-- [Mastra Documentation](https://mastra.ai/docs)
-- [Mastra Guide: Build an AI stock agent](https://mastra.ai/en/guides/guide/stock-agent)
-- [Nosana CLI](https://github.com/nosana-ci/nosana-cli)
-- [Docker Documentation](https://docs.docker.com)
-
-### Support
-
-- Join [Nosana Discord](https://nosana.com/discord) for technical support where we have dedicated [Builders Challenge Dev chat](https://discord.com/channels/236263424676331521/1354391113028337664) channel.
-- Follow [@nosana_ai](https://x.com/nosana_ai) for updates.
-
-### Important Notes
-
-- Ensure your agent doesn't expose sensitive data
-- Test thoroughly before submission
-- Keep your Docker images lightweight
-- Document all dependencies clearly
-- Make your code reproducible
-- You can vibe code it if you want 😉
-- **Only one submission per participant**
-- **Submissions that do not compile, and do not meet the specified requirements, will not be considered**
-- **Deadline is: 9 July 2025, 12.01 PM**
-- **Announcement will be announced about one week later, stay tuned for our socials for exact date**
-- **Finalize your submission at [SuperTeam](https://earn.superteam.fun/agent-challenge)**
-
-### Don’t Miss Nosana Builder Challenge Updates
-
-Good luck, builders! We can't wait to see the innovative AI agents you create for the Nosana ecosystem.
-**Happy Building!**
+Short video demo 4mins: https://youtu.be/epZ8IRD0J3Y
