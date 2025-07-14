@@ -116,7 +116,7 @@ The agent will automatically:
 
 ### 🚀 Deploy on Nosana
 
-1. Create a `nosana.json` with:
+1. Create a `nosana_agent.json` with:
 
 ```json
 {
