@@ -1,0 +1,27 @@
+{
+  "ops": [
+    {
+      "id": "agent",
+      "args": {
+        "gpu": true,
+        "image": "docker.io/jnationj/agent-challenge:latest",
+        "entrypoint": ["/bin/sh"],
+        "cmd": ["-c", "/start.sh"],
+        "expose": [
+          {
+            "port": 8080
+          }
+        ]
+      },
+      "type": "container/run"
+    }
+  ],
+  "meta": {
+    "trigger": "dashboard",
+    "system_requirements": {
+      "required_vram": 4
+    }
+  },
+  "type": "container",
+  "version": "0.1"
+}
