@@ -44,7 +44,7 @@ async function queryOverpass(lat: number, lon: number): Promise<OverpassElement[
   const query = `
     [out:json][timeout:25];
     (
-      node(around:1000,${lat},${lon})["amenity"];
+      node(around:2000,${lat},${lon})["amenity"];
     );
     out body;
   `;
@@ -126,9 +126,9 @@ export const landTool = createTool({
         const lon = a.lon ?? a.center?.lon;
         const dist = lat && lon ? haversine([centroidLat, centroidLon], [lat, lon]) : 0;
         const distanceLabel =
-          dist < 500
-              ? `within walking distance about ${Math.round(dist)} meters`
-              : dist < 1000
+          dist < 1000
+              ? `within walking distance of about ${Math.round(dist)} meters`
+          : dist < 2000
               ? `${Math.round(dist)} meters`
               : `${(dist / 1000).toFixed(1)} km`;
 

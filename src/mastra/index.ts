@@ -4,7 +4,7 @@ import { landAgent } from "./agents/land-agent/land-agent"; // Build your agent 
 import { landWorkflow } from "./agents/land-agent/land-workflow";
 
 export const mastra = new Mastra({
-	workflows: { landWorkflow }, // can be deleted later
+	/* workflows: { landWorkflow }, // can be deleted later */
 	agents: { landAgent },
 	logger: new PinoLogger({
 		name: "Mastra",

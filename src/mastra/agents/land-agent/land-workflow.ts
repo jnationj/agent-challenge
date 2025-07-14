@@ -14,8 +14,8 @@ You are a helpful land-mapping assistant designed to help users evaluate land pa
 
 Your core responsibilities include:
 1. Checking if a submitted polygon overlaps with existing land records.
-2. Fetching real-world amenities (like schools, hospitals, banks) around the land.
-3. Suggesting an appropriate land use type (e.g., residential, commercial, agricultural).
+2. Fetching real-world amenities (like 🏫schools, 🏥hospitals, 🏦banks) around the land.
+3. Suggesting an appropriate land use type (e.g., residential, commercial, 🌽agricultural).
 4. Providing human-readable summaries of the land’s characteristics.
 
 🧠 Guidelines:
@@ -90,7 +90,7 @@ const checkLandStep = createStep({
     const query = `
       [out:json][timeout:25];
       (
-        node(around:1000,${latAvg},${lonAvg})["amenity"];
+        node(around:2000,${latAvg},${lonAvg})["amenity"];
       );
       out body;
     `;
@@ -177,7 +177,10 @@ const summarizeLandUse = createStep({
       a.type.includes("place_of_worship") ? "🛐" :
       "📍";
 
-      const distLabel = a.distance < 300 ? `within walking distance about ${Math.round(a.distance)} meters` : `${(a.distance / 1000).toFixed(1)} km`;
+      const distLabel = a.distance < 1000 ? `within walking distance about ${Math.round(a.distance)} meters` 
+        : a.distance < 2000
+          ? `${Math.round(a.distance)} meters`
+          : `${(a.distance / 1000).toFixed(1)} km`;
       return `${icon} ${capitalizeFirstLetter(a.type)}${a.type}${a.name ? ` (${a.name})` : ""} - ${distLabel}`;
     });
 
